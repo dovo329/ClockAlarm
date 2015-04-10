@@ -80,6 +80,7 @@ UIScrollView *bottomScrollView;
         NSLog(@"Orientation changed to LandscapePortraitUpsideDown");
     }
     [self.view setNeedsDisplay];
+    [clockView setNeedsDisplay];
 }
 
 - (void)printRect:(CGRect)rect name:(NSString *)name
