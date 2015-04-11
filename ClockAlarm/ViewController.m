@@ -21,7 +21,62 @@
 UIScrollView *topScrollView;
 ClockView *clockView;
 UIScrollView *bottomScrollView;
+UIDatePicker *datePicker;
+UIButton *setAlarmButton;
 
+
+- (void)setFrameSizeByOrientation:(UIDeviceOrientation)orientation
+{
+    if(orientation==UIDeviceOrientationLandscapeLeft)
+    {
+        CGRect screenRect = [UIScreen mainScreen].bounds;
+        CGRect topScreenRect = screenRect;
+        topScreenRect.size.width /= 2.0;
+        CGRect bottomScreenRect = screenRect;
+        bottomScreenRect.size.width /= 2.0;
+        bottomScreenRect.origin.x += bottomScreenRect.size.width;
+        bottomScreenRect.origin.y += (bottomScreenRect.size.height-datePicker.frame.size.height)/2.0;
+        
+        clockView.frame = topScreenRect;
+        //bottomScrollView.frame = bottomScreenRect;
+        datePicker.frame = bottomScreenRect;
+    }
+    else if(orientation==UIDeviceOrientationLandscapeRight)
+    {
+        CGRect screenRect = [UIScreen mainScreen].bounds;
+        CGRect topScreenRect = screenRect;
+        topScreenRect.size.width /= 2.0;
+        CGRect bottomScreenRect = screenRect;
+        bottomScreenRect.size.width /= 2.0;
+        bottomScreenRect.origin.x += bottomScreenRect.size.width;
+        bottomScreenRect.origin.y += (bottomScreenRect.size.height-datePicker.frame.size.height)/2.0;
+        
+        clockView.frame = topScreenRect;
+        //bottomScrollView.frame = bottomScreenRect;
+        datePicker.frame = bottomScreenRect;
+    }
+    else if(orientation==UIDeviceOrientationPortrait)
+    {
+        CGRect screenRect = [UIScreen mainScreen].bounds;
+        CGRect topScreenRect = screenRect;
+        topScreenRect.size.height /= 2.0;
+        CGRect bottomScreenRect = screenRect;
+        bottomScreenRect.size.height /= 2.0;
+        /*if (bottomScreenRect.size.width > datePicker.frame.size.width) {
+            NSLog(@"w1=%f w2=%f", bottomScreenRect.size.width, datePicker.frame.size.width);
+            bottomScreenRect.origin.x += (bottomScreenRect.size.width-datePicker.frame.size.width)/2.0;
+        }*/
+        bottomScreenRect.origin.y += bottomScreenRect.size.height;
+        
+        clockView.frame = topScreenRect;
+        //bottomScrollView.frame = bottomScreenRect;
+        datePicker.frame = bottomScreenRect;
+    }
+    else if (orientation==UIDeviceOrientationPortraitUpsideDown)
+    {
+
+    }
+}
 
 -(NSUInteger)supportedInterfaceOrientations
 {
@@ -32,48 +87,18 @@ UIScrollView *bottomScrollView;
 {
     UIDeviceOrientation Orientation=[[UIDevice currentDevice]orientation];
     
-    
+    [self setFrameSizeByOrientation:Orientation];
     if(Orientation==UIDeviceOrientationLandscapeLeft)
     {
         NSLog(@"Orientation changed to LandscapeLeft");
-        
-        CGRect screenRect = [UIScreen mainScreen].bounds;
-        CGRect topScreenRect = screenRect;
-        topScreenRect.size.width /= 2.0;
-        CGRect bottomScreenRect = screenRect;
-        bottomScreenRect.size.width /= 2.0;
-        bottomScreenRect.origin.x += bottomScreenRect.size.width;
-        
-        clockView.frame = topScreenRect;
-        bottomScrollView.frame = bottomScreenRect;
     }
     else if(Orientation==UIDeviceOrientationLandscapeRight)
     {
         NSLog(@"Orientation changed to LandscapeRight");
-        
-        CGRect screenRect = [UIScreen mainScreen].bounds;
-        CGRect topScreenRect = screenRect;
-        topScreenRect.size.width /= 2.0;
-        CGRect bottomScreenRect = screenRect;
-        bottomScreenRect.size.width /= 2.0;
-        bottomScreenRect.origin.x += bottomScreenRect.size.width;
-        
-        clockView.frame = topScreenRect;
-        bottomScrollView.frame = bottomScreenRect;
     }
     else if(Orientation==UIDeviceOrientationPortrait)
     {
         NSLog(@"Orientation changed to LandscapePortrait");
-        
-        CGRect screenRect = [UIScreen mainScreen].bounds;
-        CGRect topScreenRect = screenRect;
-        topScreenRect.size.height /= 2.0;
-        CGRect bottomScreenRect = screenRect;
-        bottomScreenRect.size.height /= 2.0;
-        bottomScreenRect.origin.y += bottomScreenRect.size.height;
-        
-        clockView.frame = topScreenRect;
-        bottomScrollView.frame = bottomScreenRect;
     }
     else if (Orientation==UIDeviceOrientationPortraitUpsideDown)
     {
@@ -81,6 +106,8 @@ UIScrollView *bottomScrollView;
     }
     [self.view setNeedsDisplay];
     [clockView setNeedsDisplay];
+    //[bottomScrollView setNeedsDisplay];
+    [datePicker setNeedsDisplay];
 }
 
 - (void)printRect:(CGRect)rect name:(NSString *)name
@@ -110,17 +137,21 @@ UIScrollView *bottomScrollView;
     //[self printRect:pictureView.frame name:@"pictureView.frame"];
     
     topScrollView = [[UIScrollView alloc] initWithFrame:topScreenRect];
-    topScrollView.contentSize = topImageView.frame.size;
     [topScrollView addSubview:topImageView];
     
     clockView = [[ClockView alloc] initWithFrame:topScreenRect];
     
     bottomScrollView = [[UIScrollView alloc] initWithFrame:bottomScreenRect];
-    bottomScrollView.contentSize = bottomImageView.frame.size;
     [bottomScrollView addSubview:bottomImageView];
     
+    datePicker = [[UIDatePicker alloc] init];
+    datePicker.backgroundColor = [UIColor clearColor];
+    
+    [self setFrameSizeByOrientation:[[UIDevice currentDevice]orientation]];
+    
     //[self.view addSubview:topScrollView];
-    [self.view addSubview:bottomScrollView];
+    //[self.view addSubview:bottomScrollView];
+    [self.view addSubview:datePicker];
     [self.view addSubview:clockView];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(OrientationDidChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
