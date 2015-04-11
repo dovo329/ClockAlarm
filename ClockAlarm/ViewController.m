@@ -8,10 +8,13 @@
 
 #import "ViewController.h"
 #import "ClockView.h"
+#import <AudioToolbox/AudioToolbox.h>
 
 
 @interface ViewController ()
-
+{
+    SystemSoundID _yaySound;
+}
 @end
 
 
@@ -111,6 +114,9 @@ UIButton *setAlarmButton;
     UILocalNotification *note = [[UILocalNotification alloc] init];
     note.alertBody = @"Party Alarm!";
     note.fireDate = date;
+    note.soundName = @"yay.wav";
+    
+    AudioServicesPlaySystemSound(_yaySound);
     
     [[UIApplication sharedApplication] scheduleLocalNotification:note];
 
@@ -131,6 +137,11 @@ UIButton *setAlarmButton;
     [setAlarmButton addTarget:self
                        action:@selector(setAlarmButtonHandler)
              forControlEvents:UIControlEventTouchUpInside];
+    
+    NSString *yaySoundPath = [[NSBundle mainBundle]
+                              pathForResource:@"yay" ofType:@"wav"];
+    NSURL *yaySoundURL = [NSURL fileURLWithPath:yaySoundPath];
+    AudioServicesCreateSystemSoundID((__bridge CFURLRef)yaySoundURL, &_yaySound);
     
     [self.view addSubview:datePicker];
     [self.view addSubview:clockView];

@@ -15,6 +15,7 @@
 		A52046E21AD8774700EEAFF4 /* rainbow-marble.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A52046E01AD8774700EEAFF4 /* rainbow-marble.jpg */; };
 		A52046E31AD8774700EEAFF4 /* spaceshuttle.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A52046E11AD8774700EEAFF4 /* spaceshuttle.jpg */; };
 		A52046E61AD87CC100EEAFF4 /* ClockView.m in Sources */ = {isa = PBXBuildFile; fileRef = A52046E51AD87CC100EEAFF4 /* ClockView.m */; };
+		A5B2DAB51AD8BB3700B00BAB /* yay.wav in Resources */ = {isa = PBXBuildFile; fileRef = A5B2DAB41AD8BB3700B00BAB /* yay.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +44,7 @@
 		A52046E11AD8774700EEAFF4 /* spaceshuttle.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = spaceshuttle.jpg; sourceTree = "<group>"; };
 		A52046E41AD87CC100EEAFF4 /* ClockView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClockView.h; sourceTree = "<group>"; };
 		A52046E51AD87CC100EEAFF4 /* ClockView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClockView.m; sourceTree = "<group>"; };
+		A5B2DAB41AD8BB3700B00BAB /* yay.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = yay.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +86,7 @@
 		A52046B91AD8768800EEAFF4 /* ClockAlarm */ = {
 			isa = PBXGroup;
 			children = (
+				A5B2DAB41AD8BB3700B00BAB /* yay.wav */,
 				A52046E41AD87CC100EEAFF4 /* ClockView.h */,
 				A52046E51AD87CC100EEAFF4 /* ClockView.m */,
 				A52046E01AD8774700EEAFF4 /* rainbow-marble.jpg */,
@@ -206,6 +209,7 @@
 			files = (
 				A52046E31AD8774700EEAFF4 /* spaceshuttle.jpg in Resources */,
 				A52046C81AD8768800EEAFF4 /* Images.xcassets in Resources */,
+				A5B2DAB51AD8BB3700B00BAB /* yay.wav in Resources */,
 				A52046E21AD8774700EEAFF4 /* rainbow-marble.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -403,6 +407,7 @@
 				A52046DC1AD8768800EEAFF4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A52046DD1AD8768800EEAFF4 /* Build configuration list for PBXNativeTarget "ClockAlarmTests" */ = {
 			isa = XCConfigurationList;
@@ -411,6 +416,7 @@
 				A52046DF1AD8768800EEAFF4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
