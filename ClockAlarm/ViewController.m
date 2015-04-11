@@ -145,7 +145,7 @@ UIButton *setAlarmButton;
 {
     [super viewWillAppear:animated];
     
-    datePicker.minimumDate = [NSDate dateWithTimeIntervalSinceNow:1];
+    datePicker.minimumDate = [NSDate dateWithTimeIntervalSinceNow:60];
 }
 
 - (void)didReceiveMemoryWarning {
