@@ -20,61 +20,46 @@
 
 UIScrollView *topScrollView;
 ClockView *clockView;
-UIScrollView *bottomScrollView;
 UIDatePicker *datePicker;
 UIButton *setAlarmButton;
 
 
 - (void)setFrameSizeByOrientation:(UIDeviceOrientation)orientation
 {
-    if(orientation==UIDeviceOrientationLandscapeLeft)
+    CGRect screenRect = [UIScreen mainScreen].bounds;
+    CGRect firstScreenRect = screenRect;
+    CGRect secondScreenRect = screenRect;
+    CGRect thirdScreenRect = screenRect;
+    
+    if(orientation==UIDeviceOrientationLandscapeLeft || orientation==UIDeviceOrientationLandscapeRight)
     {
-        CGRect screenRect = [UIScreen mainScreen].bounds;
-        CGRect topScreenRect = screenRect;
-        topScreenRect.size.width /= 2.0;
-        CGRect bottomScreenRect = screenRect;
-        bottomScreenRect.size.width /= 2.0;
-        bottomScreenRect.origin.x += bottomScreenRect.size.width;
-        bottomScreenRect.origin.y += (bottomScreenRect.size.height-datePicker.frame.size.height)/2.0;
+        firstScreenRect.size.width /= 3.0;
+        secondScreenRect.size.width /= 2.0;
+        secondScreenRect.origin.x += firstScreenRect.size.width;
+        secondScreenRect.origin.y += (secondScreenRect.size.height-datePicker.frame.size.height)/2.0;
+        thirdScreenRect.origin.x = secondScreenRect.origin.x;
+        thirdScreenRect.size.height = screenRect.size.height/3.0;
+        thirdScreenRect.size.width = screenRect.size.width/3.0;
         
-        clockView.frame = topScreenRect;
-        //bottomScrollView.frame = bottomScreenRect;
-        datePicker.frame = bottomScreenRect;
-    }
-    else if(orientation==UIDeviceOrientationLandscapeRight)
-    {
-        CGRect screenRect = [UIScreen mainScreen].bounds;
-        CGRect topScreenRect = screenRect;
-        topScreenRect.size.width /= 2.0;
-        CGRect bottomScreenRect = screenRect;
-        bottomScreenRect.size.width /= 2.0;
-        bottomScreenRect.origin.x += bottomScreenRect.size.width;
-        bottomScreenRect.origin.y += (bottomScreenRect.size.height-datePicker.frame.size.height)/2.0;
-        
-        clockView.frame = topScreenRect;
-        //bottomScrollView.frame = bottomScreenRect;
-        datePicker.frame = bottomScreenRect;
+        clockView.frame = firstScreenRect;
+        datePicker.frame = secondScreenRect;
+        setAlarmButton.frame = thirdScreenRect;
     }
     else if(orientation==UIDeviceOrientationPortrait)
     {
-        CGRect screenRect = [UIScreen mainScreen].bounds;
-        CGRect topScreenRect = screenRect;
-        topScreenRect.size.height /= 2.0;
-        CGRect bottomScreenRect = screenRect;
-        bottomScreenRect.size.height /= 2.0;
-        /*if (bottomScreenRect.size.width > datePicker.frame.size.width) {
-            NSLog(@"w1=%f w2=%f", bottomScreenRect.size.width, datePicker.frame.size.width);
-            bottomScreenRect.origin.x += (bottomScreenRect.size.width-datePicker.frame.size.width)/2.0;
+        firstScreenRect.size.height /= 3.0;
+        secondScreenRect.size.height /= 3.0;
+        /*if (secondScreenRect.size.width > datePicker.frame.size.width) {
+            NSLog(@"w1=%f w2=%f", secondScreenRect.size.width, datePicker.frame.size.width);
+            secondScreenRect.origin.x += (secondScreenRect.size.width-datePicker.frame.size.width)/3.0;
         }*/
-        bottomScreenRect.origin.y += bottomScreenRect.size.height;
+        secondScreenRect.origin.y += secondScreenRect.size.height;
+        thirdScreenRect.size.height /= 3.0;
+        thirdScreenRect.origin.y += screenRect.size.height*(2.0/3.0);
         
-        clockView.frame = topScreenRect;
-        //bottomScrollView.frame = bottomScreenRect;
-        datePicker.frame = bottomScreenRect;
-    }
-    else if (orientation==UIDeviceOrientationPortraitUpsideDown)
-    {
-
+        clockView.frame = firstScreenRect;
+        datePicker.frame = secondScreenRect;
+        setAlarmButton.frame = thirdScreenRect;
     }
 }
 
@@ -106,8 +91,8 @@ UIButton *setAlarmButton;
     }
     [self.view setNeedsDisplay];
     [clockView setNeedsDisplay];
-    //[bottomScrollView setNeedsDisplay];
     [datePicker setNeedsDisplay];
+    [setAlarmButton setNeedsDisplay];
 }
 
 - (void)printRect:(CGRect)rect name:(NSString *)name
@@ -115,46 +100,52 @@ UIButton *setAlarmButton;
     NSLog(@"%@ x=%f, y=%f, width=%f, height=%f", name, rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
 }
 
+- (void)setAlarmButtonHandler
+{
+    NSDate *date = datePicker.date;
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setTimeStyle:NSDateFormatterFullStyle];
+    NSString *dateString = [dateFormat stringFromDate:date];
+    NSLog(@"Set Alarm For: %@", dateString);
+    
+    UILocalNotification *note = [[UILocalNotification alloc] init];
+    note.alertBody = @"Party Alarm!";
+    note.fireDate = date;
+    
+    [[UIApplication sharedApplication] scheduleLocalNotification:note];
+
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-
-    CGRect screenRect = [UIScreen mainScreen].bounds;
-    CGRect topScreenRect = screenRect;
-    topScreenRect.size.height /= 2.0;
-    CGRect bottomScreenRect = screenRect;
-    bottomScreenRect.size.height /= 2.0;
-    bottomScreenRect.origin.y += bottomScreenRect.size.height;
     
-    
-    UIImage * topImage = [UIImage imageNamed: @"spaceshuttle.jpg"];
-    UIImage * bottomImage = [UIImage imageNamed: @"rainbow-marble.jpg"];
-    //UIImage * myImage = [UIImage imageNamed: @"chicken.jpg"];
-    UIImageView *topImageView = [[UIImageView alloc] initWithImage:topImage];
-    UIImageView *bottomImageView = [[UIImageView alloc] initWithImage:bottomImage];
-    
-    //[self printRect:screenRect name:@"screenRect"];
-    //[self printRect:pictureView.frame name:@"pictureView.frame"];
-    
-    topScrollView = [[UIScrollView alloc] initWithFrame:topScreenRect];
-    [topScrollView addSubview:topImageView];
-    
-    clockView = [[ClockView alloc] initWithFrame:topScreenRect];
-    
-    bottomScrollView = [[UIScrollView alloc] initWithFrame:bottomScreenRect];
-    [bottomScrollView addSubview:bottomImageView];
-    
+    clockView = [[ClockView alloc] init];
     datePicker = [[UIDatePicker alloc] init];
     datePicker.backgroundColor = [UIColor clearColor];
+    setAlarmButton = [[UIButton alloc] init];
+    [setAlarmButton setTitle:@"Set Alarm" forState:UIControlStateNormal];
+    [setAlarmButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [setAlarmButton setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+    [setAlarmButton setBackgroundColor:[UIColor clearColor]];
+    [setAlarmButton addTarget:self
+                       action:@selector(setAlarmButtonHandler)
+             forControlEvents:UIControlEventTouchUpInside];
     
-    [self setFrameSizeByOrientation:[[UIDevice currentDevice]orientation]];
-    
-    //[self.view addSubview:topScrollView];
-    //[self.view addSubview:bottomScrollView];
     [self.view addSubview:datePicker];
     [self.view addSubview:clockView];
+    [self.view addSubview:setAlarmButton];
+    
+    [self setFrameSizeByOrientation:UIDeviceOrientationPortrait];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(OrientationDidChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    datePicker.minimumDate = [NSDate dateWithTimeIntervalSinceNow:1];
 }
 
 - (void)didReceiveMemoryWarning {
