@@ -26,6 +26,9 @@
                                             selector:@selector(timerHandler)
                                             userInfo:nil
                                              repeats:YES];
+    
+    [[NSRunLoop currentRunLoop] addTimer:_timer forMode:NSRunLoopCommonModes];
+    
     _color = color;
     _rotationInDegrees = 0.0;
     _seconds = 0.0;
